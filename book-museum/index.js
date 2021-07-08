@@ -1,10 +1,10 @@
 const fetch = require("node-fetch");
 
 exports.handler = async (evt) => {
-  console.log(evt)
-  
+ 
+
   return fetch(
-    "https://tjcutz0647.execute-api.us-east-1.amazonaws.com/Prod/hotel",
+    "https://tjcutz0647.execute-api.us-east-1.amazonaws.com/Prod/museum",
     {
       method: "POST",
       body: JSON.stringify(bookRequest),

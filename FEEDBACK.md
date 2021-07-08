@@ -26,3 +26,18 @@ is not a valid JavaScript function. `var` is a reserved word.
 
 Typo: "that will broke" -> "that will break"
 
+## 2.1
+
+Maybe "without the console" rather than "without these facilities"
+
+Typo: "If a function have to write" -> If a function has to write"
+
+The role is technically a "service role."
+
+Typo: "so function’s that will assume this role" -> "so functions that will assume this role"
+
+Your explanation of roles and handlers is really good.
+
+I'm not sure how a "sub-method" is not just a method.
+
+
