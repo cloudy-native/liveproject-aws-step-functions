@@ -40,4 +40,51 @@ Your explanation of roles and handlers is really good.
 
 I'm not sure how a "sub-method" is not just a method.
 
+## 2 Project Conclusions
 
+Typo: "Even if it is hide" -> "Although it is hidden"
+
+# The Simplest Step Functions
+
+Typo: "resources that needs" -> "resources that need"
+
+"Author with code snippets" is not one of the options for creating a workflow
+
+![](images/Screen%20Shot%202021-07-08%20at%2020.36.29.png)
+
+It might be cheating, but you get some nice completion of Lambda if you use the visual editor.
+
+![](images/Screen%20Shot%202021-07-08%20at%2020.40.11.png)
+
+Typo: "this state machine replace the process" -> "this state machine replaces the process"
+
+Do not include comments in the JSON payload. Just let people copy
+
+```
+{
+   "purchase": {
+         "buyer_id": "mariano"
+   },
+   "hotel": {
+      "start_date": "2020-03-13",
+      "end_date": "2020-03-15"
+   },
+   "museum": {
+      "name": "tate gallery",
+      "when": "2020-03-14"
+   }
+}
+```
+
+So steps 3 and 4 are a bit confusing. It's not clear why we tested the workflow with the above payload. Maybe just to see an error? Not sure.
+
+I'm not sure what "Use Parameters to the state configuration" means. It might be better just to say something "execute the workflow again, this time with the following payload."
+
+```
+{
+   "start_date": "2020-03-13",
+   "end_date": "2020-03-15",
+   "buyer_id": "mariano",
+   "near": "tate gallery"
+}
+```
