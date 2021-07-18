@@ -88,3 +88,39 @@ I'm not sure what "Use Parameters to the state configuration" means. It might be
    "near": "tate gallery"
 }
 ```
+
+# Publish SNS Message
+
+# 1.1
+
+A bit easy.
+
+# 2.1
+
+Typo: "notification reach that topic" -> "notification reaches that topic"
+
+Clearer?: "close the gap" -> "fill in some details"
+
+Clarification: "Create an IAM role" -> "Create a Lambda service role"
+
+Clarification: Make the Lambda runtime Node.js 14.x
+
+Clarification: "no matter the filename" -> " the filename does not matter"
+
+s3.upload()... it's possible in theory, but s3.putObject() seem like a better fit here.
+
+The payload is not valid JSON. The correct version is
+
+```
+{
+    "Records": [
+        {
+            "Sns": {
+                "Message": "{\"purchase\":{\"buyer_id\":\"mariano3\"},\"hotel\":{\"start_date\":\"2020-03-13\",\"end_date\":\"2020-03-15\",\"reservation_id\":\"XULOQ\",\"name\":\"L1\"},\"museum\":{\"when\":\"2020-03-14\",\"reservation_id\":\"YOZYC\",\"name\":\"tate gallery\"}}",
+            }
+        }
+    ]
+}
+```
+
+Typo: `InvoingingBuilderFunction` -> `InvoicingBuilderFunction`
