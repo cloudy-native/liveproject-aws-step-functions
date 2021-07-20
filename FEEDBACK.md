@@ -124,3 +124,77 @@ The payload is not valid JSON. The correct version is
 ```
 
 Typo: `InvoingingBuilderFunction` -> `InvoicingBuilderFunction`
+
+# Lambda error handling
+
+The input payload is not valid JSON. The correct version is
+
+```
+{
+  "buyer_id": "mariano",
+  "start_date": "2020-03-13",
+  "end_date": "2020-03-15",
+  "near": "tate gallery"
+}
+```
+
+And it would be more convenient without the comments (which are also invalid JSON.)
+
+Ha! I was editing book-museum-client in the wrong Lambda. That had me confused for a minute or 2. I learned something.
+
+I think maybe include a quick README.md in the zip file download that explains what the zip file
+contains (the code's in `index.js` instead of the `...client.js` files) and a quick walk through the code.
+
+The code works, of course. But there are is a handful of issues you might want to consider.
+
+1. I generally prefer the constructor pattern for class initialization in JS. For no good reason probably.
+1. The `await` for the return value is redundant.
+1. No need to assign the value to `json` only to return it on the next line.
+1. I generally prefer classes to be defined before first use.
+
+I'd suggest making the following adjustments. But this is just my taste and not any kind of errors :-)
+
+```
+const fetch = require("node-fetch");
+const BOOKING_SERVICE = process.env.BOOKING_SERVICE;
+
+class InvalidInputError {
+    constructor(message) {
+        this.name = 'InvalidInputError';
+        this.message = message;
+    }
+}
+InvalidInputError.prototype = new Error();
+
+class TransientError {
+    constructor(message) {
+        this.name = 'TransientError';
+        this.message = message;
+    }
+}
+TransientError.prototype = new Error();
+
+exports.handler = async (evt) => {
+    // fetch the request
+    let response = await fetch(BOOKING_SERVICE, {
+        method: 'POST',
+        body: JSON.stringify(evt)
+    })
+
+    // parse the request
+    if (response.ok) {
+        return response.json();
+    } else if (response.status == 418) {
+        let json = await response.json();
+        throw new InvalidInputError(JSON.stringify(json));
+    } else if (response.status == 503) {
+        let json = await response.json();
+        throw new TransientError(JSON.stringify(json));
+    } else {
+        throw new Error("There was an unknown error with hotel booking process.");
+    }
+}
+```
+
+Typo: "that catch any error different from" -> "that catches any error different from"
+

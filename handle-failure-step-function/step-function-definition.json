@@ -1,0 +1,91 @@
+{
+    "StartAt": "BookHotelState",
+    "States": {
+      "BookHotelState": {
+        "Next": "BookMuseumState",
+        "Parameters": {
+          "buyer_id.$": "$.purchase.buyer_id",
+          "end_date.$": "$.hotel.end_date",
+          "near.$": "$.museum.name",
+          "start_date.$": "$.hotel.start_date"
+        },
+        "Resource": "arn:aws:lambda:us-east-1:607477397669:function:BookHotelClientS1P3",
+        "ResultPath": "$.hotel",
+        "Type": "Task",
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "TransientError"
+            ],
+            "BackoffRate": 1,
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3
+          }
+        ],
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Fail",
+            "ResultPath": "$.errorInfo"
+          }
+        ]
+      },
+      "Fail": {
+        "Type": "Fail"
+      },
+      "CancelHotelState": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:us-east-1:607477397669:function:CancelHotelClientS1P4:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException"
+            ],
+            "IntervalSeconds": 2,
+            "MaxAttempts": 6,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Fail"
+      },
+      "BookMuseumState": {
+        "End": true,
+        "Parameters": {
+          "buyer_id.$": "$.purchase.buyer_id",
+          "museum_name.$": "$.museum.name",
+          "when.$": "$.museum.when"
+        },
+        "Resource": "arn:aws:lambda:us-east-1:607477397669:function:BookMuseumClientS1P3",
+        "ResultPath": "$.museum",
+        "Type": "Task",
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "TransientError"
+            ],
+            "BackoffRate": 1,
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3
+          }
+        ],
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "CancelHotelState",
+            "ResultPath": "$.errorInfo"
+          }
+        ]
+      }
+    }
+  }
